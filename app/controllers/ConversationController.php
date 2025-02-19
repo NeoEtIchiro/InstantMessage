@@ -1,9 +1,9 @@
 <?php
 // filepath: /c:/xampp/htdocs/InstantMessage/app/controllers/ConversationController.php
 session_start();
-require_once '../models/Conversation.php';
-require_once '../models/User.php';
-require_once '../database/ConnexionDB.php';
+require_once __DIR__ . '/../models/Conversation.php';
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../database/ConnexionDB.php';
 
 class ConversationController {
     // Retourne la liste des conversations de l'utilisateur avec le login de l'autre participant pour une conversation directe
@@ -25,7 +25,6 @@ class ConversationController {
             $result[] = [
                 'conversation_id' => $conversation->id,
                 'type' => $conversation->type,
-                'created_at' => $conversation->created_at,
                 'other_login' => $other ? $other['login'] : 'Groupe'
             ];
         }

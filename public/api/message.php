@@ -1,6 +1,4 @@
 <?php
-// filepath: /c:/xampp/htdocs/InstantMessage/public/api/message.php
-session_start();
 header('Content-Type: text/html');
 
 require_once '../../app/controllers/MessageController.php';

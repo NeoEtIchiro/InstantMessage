@@ -46,7 +46,7 @@
             // Fonction de chargement d'une conversation donnée
             function loadConversation(conversationId) {
                 $.ajax({
-                    url: "../api/message.php?action=getMessages",
+                    url: "../public/api/message.php?action=getMessages",
                     method: "GET",
                     data: { id: conversationId },
                     dataType: "html",
@@ -62,7 +62,7 @@
             // Fonction pour charger la liste des conversations de l'utilisateur
             function loadConversations() {
                 $.ajax({
-                    url: "../api/conversation.php?action=getConversations",
+                    url: "../public/api/conversation.php?action=getConversations",
                     method: "GET",
                     dataType: "json",
                     success: function(response) {
@@ -98,7 +98,7 @@
             if (params.has('userId')) {
                 let userId = params.get('userId');
                 $.ajax({
-                    url: "../api/conversation.php?action=getOrCreateConversation",
+                    url: "../public/api/conversation.php?action=getOrCreateConversation",
                     method: "GET",
                     data: { userId: userId },
                     dataType: "json",

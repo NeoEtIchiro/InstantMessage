@@ -1,6 +1,4 @@
 <?php
-// filepath: /c:/xampp/htdocs/InstantMessage/public/api/conversation.php
-session_start();
 header('Content-Type: application/json');
 
 require_once '../../app/controllers/ConversationController.php';

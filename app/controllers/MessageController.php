@@ -1,8 +1,7 @@
 <?php
-// filepath: /c:/xampp/htdocs/InstantMessage/app/controllers/MessageController.php
 session_start();
-require_once '../models/Message.php';
-require_once '../database/ConnexionDB.php';
+require_once(__DIR__ . '/../models/Message.php');
+require_once(__DIR__ . '/../database/ConnexionDB.php');
 
 class MessageController {
     // Retourne les messages d'une conversation

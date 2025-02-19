@@ -27,7 +27,7 @@
         $(document).ready(function() {
             function fetchUsers(query = '') {
                 $.ajax({
-                    url: "../api/user.php?action=searchUsers",
+                    url: "../public/api/user.php?action=searchUsers",
                     method: "GET",
                     data: { query: query },
                     dataType: "json",

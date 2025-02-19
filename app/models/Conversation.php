@@ -2,18 +2,16 @@
 
 class Conversation {
     public $id;
-    public $type;       // par exemple 'direct' ou 'group'
-    public $created_at;
+    public $type;      
 
-    public function __construct($id = null, $type = 'direct', $created_at = null) {
+    public function __construct($id = null, $type = 'direct') {
         $this->id = $id;
         $this->type = $type;
-        $this->created_at = $created_at;
     }
 
     // Récupérer toutes les conversations d'un utilisateur
     public static function getConversationsForUser(PDO $conn, $userId) {
-        $query = "SELECT c.id, c.type, c.created_at 
+        $query = "SELECT c.id, c.type 
                   FROM conversations c
                   JOIN conversation_users cu ON c.id = cu.conversation_id
                   WHERE cu.user_id = :userId";
@@ -23,7 +21,7 @@ class Conversation {
 
         $conversations = [];
         while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $conversations[] = new Conversation($row['id'], $row['type'], $row['created_at']);
+            $conversations[] = new Conversation($row['id'], $row['type']);
         }
         return $conversations;
     }

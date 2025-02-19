@@ -30,7 +30,7 @@
     $(document).ready(function() {
         // Appel à l'API pour récupérer l'utilisateur courant
         $.ajax({
-            url: "../api/user.php?action=getCurrentUser",
+            url: "../public/api/user.php?action=getCurrentUser",
             method: "GET",
             dataType: "json",
             success: function(response) {
