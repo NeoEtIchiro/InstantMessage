@@ -8,44 +8,73 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
     <h1 id="form-title" class="text-xl font-bold mb-4">Se connecter</h1>
-    <form id="auth-form" action="../Database/auth.php" method="POST" class="w-full max-w-sm">
+    <form id="auth-form" class="w-full max-w-sm">
         <input id="action-input" type="hidden" name="action" value="login">
         <div class="mb-4">
             <label class="block mb-1" for="email">Email :</label>
-            <input id="email" name="email" type="email" class="w-full p-2 border">
+            <input id="email" name="email" type="email" class="w-full p-2 border" required>
         </div>
         <div class="mb-4">
             <label class="block mb-1" for="password">Mot de passe :</label>
-            <input id="password" name="password" type="password" class="w-full p-2 border">
+            <input id="password" name="password" type="password" class="w-full p-2 border" required>
         </div>
         <button id="submit-button" type="submit" class="w-full bg-blue-500 text-white p-2">Connexion</button>
+        <div id="error-message" class="mt-4 text-red-500"></div>
     </form>
     <a href="#" id="toggle-link" class="mt-4">Pas encore de compte ?</a>
     
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const toggleLink = document.getElementById('toggle-link');
-            const formTitle = document.getElementById('form-title');
-            const actionInput = document.getElementById('action-input');
-            const submitButton = document.getElementById('submit-button');
-        
-            toggleLink.addEventListener("click", (e) => {
-                e.preventDefault();
-                if (actionInput.value === 'login') {
-                    // Passer en mode register
-                    actionInput.value = 'register';
-                    formTitle.textContent = 'Créer un compte';
-                    submitButton.textContent = 'Inscription';
-                    toggleLink.textContent = 'Vous avez déjà un compte ?';
-                } else {
-                    // Retour en mode login
-                    actionInput.value = 'login';
-                    formTitle.textContent = 'Se connecter';
-                    submitButton.textContent = 'Connexion';
-                    toggleLink.textContent = 'Pas encore de compte ?';
-                }
-            });
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggleLink = document.getElementById('toggle-link');
+        const formTitle = document.getElementById('form-title');
+        const actionInput = document.getElementById('action-input');
+        const submitButton = document.getElementById('submit-button');
+        const errorMessage = document.getElementById('error-message');
+        const authForm = document.getElementById('auth-form');
+    
+        toggleLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            if (actionInput.value === 'login') {
+                actionInput.value = 'register';
+                formTitle.textContent = 'Créer un compte';
+                submitButton.textContent = 'Inscription';
+                toggleLink.textContent = 'Vous avez déjà un compte ?';
+            } else {
+                actionInput.value = 'login';
+                formTitle.textContent = 'Se connecter';
+                submitButton.textContent = 'Connexion';
+                toggleLink.textContent = 'Pas encore de compte ?';
+            }
         });
+    
+        authForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          
+          // Effacer les anciens messages d'erreur
+          errorMessage.textContent = "";
+    
+          // Récupérer les données du formulaire
+          const formData = new FormData(authForm);
+    
+          fetch("../public/api/auth.php", {
+            method: "POST",
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  // Rediriger vers messages.html en cas de succès
+                  window.location.href = "messages.html";
+              } else {
+                  errorMessage.textContent = data.message || "Erreur lors de l'authentification.";
+              }
+          })
+          .catch(error => {
+              errorMessage.textContent = "Erreur lors de la communication avec le serveur.";
+              console.error("Erreur:", error);
+          });
+        });
+      });
     </script>
 </body>
 </html>

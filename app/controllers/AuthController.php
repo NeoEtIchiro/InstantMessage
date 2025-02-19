@@ -1,8 +1,11 @@
 <?php
 // filepath: /c:/xampp/htdocs/InstantMessage/app/controllers/AuthController.php
-session_start();
-require_once '../models/User.php';
-require_once '../database/ConnexionDB.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../database/ConnexionDB.php';
 
 class AuthController {
     // Traitement de la connexion

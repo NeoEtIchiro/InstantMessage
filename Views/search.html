@@ -25,10 +25,9 @@
     
     <script>
         $(document).ready(function() {
-
             function fetchUsers(query = '') {
                 $.ajax({
-                    url: "../Database/users.php?action=searchUsers",
+                    url: "../api/user.php?action=searchUsers",
                     method: "GET",
                     data: { query: query },
                     dataType: "json",
@@ -36,10 +35,9 @@
                         $('#user-list').empty();
                         if (response.users && response.users.length > 0) {
                             response.users.forEach(function(user) {
-                                // Chaque utilisateur doit maintenant avoir un id en plus du login
                                 var li = $('<li>', {
                                     text: user.login,
-                                    'data-id': user.id, // Assurez-vous que users.php retourne 'id'
+                                    'data-id': user.id,
                                     class: "cursor-pointer hover:underline"
                                 });
                                 $('#user-list').append(li);
@@ -54,7 +52,7 @@
                 });
             }
 
-            // Au clic sur un utilisateur, rediriger vers messages.html en passant l'id utilisateur en paramètre
+            // Au clic sur un utilisateur, rediriger vers messages.html avec l'ID utilisateur en paramètre
             $('#user-list').on('click', 'li[data-id]', function() {
                 var userId = $(this).data('id');
                 console.log("Clique sur un utilisateur, id =", userId);

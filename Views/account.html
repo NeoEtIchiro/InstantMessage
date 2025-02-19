@@ -9,8 +9,9 @@
 </head>
 <body class="min-h-screen flex flex-col">
     <main class="flex-grow p-4">
+        <!-- Affichage de l'email de l'utilisateur -->
         <div id="account-email"></div>
-        <form action="../Database/logout.php" method="POST">
+        <form action="../public/api/logout.php" method="POST">
             <button type="submit">Se déconnecter</button>
         </form>
     </main>
@@ -26,23 +27,24 @@
     </footer>
     
     <script>
-        $(document).ready(function() {
-            $.ajax({
-                url: "../Database/users.php?action=getUser",
-                method: "GET",
-                dataType: "json",
-                success: function(response) {
-                    if (response.email) {
-                        $("#account-email").text("Email : " + response.email);
-                    } else {
-                        $("#account-email").text("Aucun email trouvé.");
-                    }
-                },
-                error: function() {
-                    $("#account-email").text("Erreur lors de la récupération des informations.");
+    $(document).ready(function() {
+        // Appel à l'API pour récupérer l'utilisateur courant
+        $.ajax({
+            url: "../api/user.php?action=getCurrentUser",
+            method: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.user && response.user.login) {
+                    $("#account-email").text("Email : " + response.user.login);
+                } else {
+                    $("#account-email").text("Aucun email trouvé.");
                 }
-            });
+            },
+            error: function() {
+                $("#account-email").text("Erreur lors de la récupération des informations.");
+            }
         });
+    });
     </script>
 </body>
 </html>
