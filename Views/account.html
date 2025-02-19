@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instant Message</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+    <main class="flex-grow p-4">
+        <div id="account-email"></div>
+        <form action="../Database/logout.php" method="POST">
+            <button type="submit">Se déconnecter</button>
+        </form>
+    </main>
+
+    <footer class="mt-auto p-4 bg-gray-800 text-white">
+        <nav>
+            <ul class="flex justify-center gap-16">
+                <li><a href="messages.html" class="hover:underline">Messages</a></li>
+                <li><a href="search.html" class="hover:underline">Rechercher</a></li>
+                <li><a href="account.html" class="hover:underline">Compte</a></li>
+            </ul>
+        </nav>
+    </footer>
+    
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "../Database/users.php?action=getUser",
+                method: "GET",
+                dataType: "json",
+                success: function(response) {
+                    if (response.email) {
+                        $("#account-email").text("Email : " + response.email);
+                    } else {
+                        $("#account-email").text("Aucun email trouvé.");
+                    }
+                },
+                error: function() {
+                    $("#account-email").text("Erreur lors de la récupération des informations.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

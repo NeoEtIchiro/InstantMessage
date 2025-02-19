@@ -7,9 +7,9 @@
     <title>Connexion / Inscription</title>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
-    <h1 class="text-xl font-bold mb-4">Se connecter</h1>
-    <form action="../auth.php" method="POST" class="w-full max-w-sm">
-        <input type="hidden" name="action" value="login">
+    <h1 id="form-title" class="text-xl font-bold mb-4">Se connecter</h1>
+    <form id="auth-form" action="../Database/auth.php" method="POST" class="w-full max-w-sm">
+        <input id="action-input" type="hidden" name="action" value="login">
         <div class="mb-4">
             <label class="block mb-1" for="email">Email :</label>
             <input id="email" name="email" type="email" class="w-full p-2 border">
@@ -18,8 +18,34 @@
             <label class="block mb-1" for="password">Mot de passe :</label>
             <input id="password" name="password" type="password" class="w-full p-2 border">
         </div>
-        <button type="submit" class="w-full bg-blue-500 text-white p-2">Connexion</button>
+        <button id="submit-button" type="submit" class="w-full bg-blue-500 text-white p-2">Connexion</button>
     </form>
-    <a href="">Pas encore de compte ?</a>
+    <a href="#" id="toggle-link" class="mt-4">Pas encore de compte ?</a>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleLink = document.getElementById('toggle-link');
+            const formTitle = document.getElementById('form-title');
+            const actionInput = document.getElementById('action-input');
+            const submitButton = document.getElementById('submit-button');
+        
+            toggleLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (actionInput.value === 'login') {
+                    // Passer en mode register
+                    actionInput.value = 'register';
+                    formTitle.textContent = 'Créer un compte';
+                    submitButton.textContent = 'Inscription';
+                    toggleLink.textContent = 'Vous avez déjà un compte ?';
+                } else {
+                    // Retour en mode login
+                    actionInput.value = 'login';
+                    formTitle.textContent = 'Se connecter';
+                    submitButton.textContent = 'Connexion';
+                    toggleLink.textContent = 'Pas encore de compte ?';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

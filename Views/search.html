@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instant Message</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="min-h-screen flex flex-col">
+    <main class="flex-grow p-4">
+        <input type="text" id="search-bar" placeholder="Rechercher par email" class="w-full p-2 border mb-4">
+        <ul id="user-list" class="list-disc pl-5"></ul>
+    </main>
+
+    <footer class="mt-auto p-4 bg-gray-800 text-white">
+        <nav>
+            <ul class="flex justify-center gap-16">
+                <li><a href="messages.html" class="hover:underline">Messages</a></li>
+                <li><a href="search.html" class="hover:underline">Rechercher</a></li>
+                <li><a href="account.html" class="hover:underline">Compte</a></li>
+            </ul>
+        </nav>
+    </footer>
+    
+    <script>
+        $(document).ready(function() {
+
+            function fetchUsers(query = '') {
+                $.ajax({
+                    url: "../Database/users.php?action=searchUsers",
+                    method: "GET",
+                    data: { query: query },
+                    dataType: "json",
+                    success: function(response) {
+                        $('#user-list').empty();
+                        if (response.users && response.users.length > 0) {
+                            response.users.forEach(function(user) {
+                                // Chaque utilisateur doit maintenant avoir un id en plus du login
+                                var li = $('<li>', {
+                                    text: user.login,
+                                    'data-id': user.id, // Assurez-vous que users.php retourne 'id'
+                                    class: "cursor-pointer hover:underline"
+                                });
+                                $('#user-list').append(li);
+                            });
+                        } else {
+                            $('#user-list').append('<li>Aucun utilisateur trouvé.</li>');
+                        }
+                    },
+                    error: function() {
+                        $('#user-list').append('<li>Erreur lors de la récupération des utilisateurs.</li>');
+                    }
+                });
+            }
+
+            // Au clic sur un utilisateur, rediriger vers messages.html en passant l'id utilisateur en paramètre
+            $('#user-list').on('click', 'li[data-id]', function() {
+                var userId = $(this).data('id');
+                console.log("Clique sur un utilisateur, id =", userId);
+                window.location.href = "messages.html?userId=" + userId;
+            });
+
+            $('#search-bar').on('input', function() {
+                const query = $(this).val();
+                fetchUsers(query);
+            });
+
+            // Chargement initial de tous les utilisateurs
+            fetchUsers();
+        });
+    </script>
+</body>
+</html>
