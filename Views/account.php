@@ -16,15 +16,7 @@
         </form>
     </main>
 
-    <footer class="mt-auto p-4 bg-gray-800 text-white">
-        <nav>
-            <ul class="flex justify-center gap-16">
-                <li><a href="messages.html" class="hover:underline">Messages</a></li>
-                <li><a href="search.html" class="hover:underline">Rechercher</a></li>
-                <li><a href="account.html" class="hover:underline">Compte</a></li>
-            </ul>
-        </nav>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.php'; ?>
     
     <script>
     $(document).ready(function() {

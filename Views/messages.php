@@ -8,9 +8,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="min-h-screen flex flex-col">
-
     <!-- Conteneur principal pour conversations et messages -->
-    <div class="flex flex-grow">
+    <div class="flex flex-grow" style="max-height: calc(100vh - 64px);">
         <!-- Liste des conversations à gauche -->
         <aside class="w-1/4 border-r overflow-auto">
             <h2 class="text-xl font-bold p-4 border-b">Conversations</h2>
@@ -22,29 +21,28 @@
 
         <!-- Zone de messages pour la conversation sélectionnée -->
         <section class="flex-grow p-4">
-            <div id="messages-container">
-                <h2 class="text-2xl font-bold mb-4">Bienvenue sur la messagerie</h2>
-                <p>Sélectionnez une conversation sur la gauche ou recherchez un utilisateur.</p>
+            <div class="flex flex-col h-full">
+                <div id="messages-container" class="w-full flex-grow overflow-auto text-center">
+                    <h2 class="text-2xl font-bold mb-4">Bienvenue sur la messagerie</h2>
+                    <p>Sélectionnez une conversation sur la gauche ou recherchez un utilisateur.</p>  
+                </div>
+                <form class="w-full h-fit flex">
+                    <textarea id="message-text" placeholder="Envoyer un message" class="w-full resize-none p-2 min-h-11 h-11 border rounded-lg mr-2"></textarea>
+                    <button type="submit">Envoyer</button>
+                </form>
             </div>
         </section>
     </div>
 
-    <!-- Footer en bas de la page -->
-    <footer class="w-full p-4 bg-gray-800 text-white">
-        <nav>
-            <ul class="flex justify-center gap-16">
-                <li><a href="messages.html" class="hover:underline">Messages</a></li>
-                <li><a href="search.html" class="hover:underline">Rechercher</a></li>
-                <li><a href="account.html" class="hover:underline">Compte</a></li>
-            </ul>
-        </nav>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.php'; ?>
 
     <script>
         $(document).ready(function() {
+            var currentConversationId = null;
 
-            // Fonction de chargement d'une conversation donnée
+            // Load messages for a given conversation.
             function loadConversation(conversationId) {
+                currentConversationId = conversationId;
                 $.ajax({
                     url: "../public/api/message.php?action=getMessages",
                     method: "GET",
@@ -59,7 +57,7 @@
                 });
             }
 
-            // Fonction pour charger la liste des conversations de l'utilisateur
+            // Load the list of conversations.
             function loadConversations() {
                 $.ajax({
                     url: "../public/api/conversation.php?action=getConversations",
@@ -71,7 +69,7 @@
                             response.conversations.forEach(function(conv) {
                                 var li = $('<li>', {
                                     text: conv.other_login,
-                                    'data-id': conv.conversation_id,  // l'identifiant de la conversation
+                                    'data-id': conv.conversation_id,
                                     class: "p-4 border-b cursor-pointer hover:bg-gray-100"
                                 });
                                 $("#conversation-list").append(li);
@@ -86,14 +84,13 @@
                 });
             }
 
-            // Gestion du clic sur une conversation de la liste
+            // When a conversation is clicked.
             $("#conversation-list").on('click', 'li[data-id]', function() {
                 var conversationId = $(this).data('id');
                 loadConversation(conversationId);
             });
 
-            // Si un paramètre userId est présent dans l'URL,
-            // essayer d'obtenir ou créer la conversation directe correspondante
+            // Create or get direct conversation based on URL param.
             let params = new URLSearchParams(window.location.search);
             if (params.has('userId')) {
                 let userId = params.get('userId');
@@ -115,8 +112,48 @@
                 });
             }
 
-            // Chargement initial de la liste des conversations
             loadConversations();
+
+            // Capture submit via bouton
+            $("form").on("submit", function(e) {
+                e.preventDefault();
+                var messageText = $("#message-text").val().trim();
+                if (!currentConversationId) {
+                    alert("Sélectionnez une conversation.");
+                    return;
+                }
+                if (messageText === "") {
+                    return;
+                }
+                $.ajax({
+                    url: "../public/api/message.php?action=sendMessage",
+                    method: "POST",
+                    data: {
+                        conversationId: currentConversationId,
+                        content: messageText
+                    },
+                    dataType: "json",
+                    success: function(response) {
+                        if(response.success){
+                            $("#message-text").val("");
+                            loadConversation(currentConversationId);
+                        } else {
+                            alert(response.message || "Erreur lors de l'envoi du message.");
+                        }
+                    },
+                    error: function() {
+                        alert("Erreur lors de l'envoi du message.");
+                    }
+                });
+            });
+
+            // Envoyer le message sur "Enter" et inserer un saut de ligne sur "Shift+Enter"
+            $("#message-text").on("keydown", function(e) {
+                if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    $(this).closest("form").trigger("submit");
+                }
+            });
         });
     </script>
 </body>

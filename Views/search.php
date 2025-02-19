@@ -13,15 +13,7 @@
         <ul id="user-list" class="list-disc pl-5"></ul>
     </main>
 
-    <footer class="mt-auto p-4 bg-gray-800 text-white">
-        <nav>
-            <ul class="flex justify-center gap-16">
-                <li><a href="messages.html" class="hover:underline">Messages</a></li>
-                <li><a href="search.html" class="hover:underline">Rechercher</a></li>
-                <li><a href="account.html" class="hover:underline">Compte</a></li>
-            </ul>
-        </nav>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.php'; ?>
     
     <script>
         $(document).ready(function() {
@@ -56,7 +48,7 @@
             $('#user-list').on('click', 'li[data-id]', function() {
                 var userId = $(this).data('id');
                 console.log("Clique sur un utilisateur, id =", userId);
-                window.location.href = "messages.html?userId=" + userId;
+                window.location.href = "messages.php?userId=" + userId;
             });
 
             $('#search-bar').on('input', function() {

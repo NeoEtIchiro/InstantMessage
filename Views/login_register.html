@@ -64,7 +64,7 @@
           .then(data => {
               if (data.success) {
                   // Rediriger vers messages.html en cas de succès
-                  window.location.href = "messages.html";
+                  window.location.href = "messages.php";
               } else {
                   errorMessage.textContent = data.message || "Erreur lors de l'authentification.";
               }
