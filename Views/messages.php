@@ -39,8 +39,10 @@
     <script>
         $(document).ready(function() {
             var currentConversationId = null;
+            var refreshInterval = 500; // 500ms pour éviter les appels trop fréquents
+            var scrollThreshold = 50; // Seuil en pixels pour considérer que l'utilisateur est en bas
 
-            // Load messages for a given conversation.
+            // Fonction de chargement des messages pour une conversation donnée.
             function loadConversation(conversationId) {
                 currentConversationId = conversationId;
                 $.ajax({
@@ -49,7 +51,16 @@
                     data: { id: conversationId },
                     dataType: "html",
                     success: function(data) {
-                        $("#messages-container").html(data);
+                        var $container = $("#messages-container");
+                        // Vérifie si l'utilisateur est proche du bas
+                        var isScrolledToBottom = ($container[0].scrollHeight - $container.scrollTop()) <= ($container.outerHeight() + scrollThreshold);
+                        
+                        $container.html(data);
+                        
+                        // Si déjà en bas (ou presque), on force le scroll en bas
+                        if(isScrolledToBottom) {
+                            $container.scrollTop($container[0].scrollHeight);
+                        }
                     },
                     error: function() {
                         $("#messages-container").html("<p>Erreur lors du chargement des messages.</p>");
@@ -57,7 +68,14 @@
                 });
             }
 
-            // Load the list of conversations.
+            // Actualise les messages à intervalles réguliers.
+            setInterval(function() {
+                if (currentConversationId !== null) {
+                    loadConversation(currentConversationId);
+                }
+            }, refreshInterval);
+
+            // Charge la liste des conversations.
             function loadConversations() {
                 $.ajax({
                     url: "../public/api/conversation.php?action=getConversations",
@@ -84,15 +102,15 @@
                 });
             }
 
-            // When a conversation is clicked.
+            // Lorsqu'une conversation est cliquée.
             $("#conversation-list").on('click', 'li[data-id]', function() {
                 var conversationId = $(this).data('id');
                 loadConversation(conversationId);
             });
 
-            // Create or get direct conversation based on URL param.
+            // Création ou récupération d'une conversation via un paramètre URL.
             let params = new URLSearchParams(window.location.search);
-            if (params.has('userId')) {
+            if (params.has('userId') && currentConversationId === null) {
                 let userId = params.get('userId');
                 $.ajax({
                     url: "../public/api/conversation.php?action=getOrCreateConversation",
@@ -114,7 +132,7 @@
 
             loadConversations();
 
-            // Capture submit via bouton
+            // Envoi du message via le formulaire.
             $("form").on("submit", function(e) {
                 e.preventDefault();
                 var messageText = $("#message-text").val().trim();
@@ -147,7 +165,7 @@
                 });
             });
 
-            // Envoyer le message sur "Enter" et inserer un saut de ligne sur "Shift+Enter"
+            // Envoi du message sur "Enter" (et saut de ligne avec Shift+Enter)
             $("#message-text").on("keydown", function(e) {
                 if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
