@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Connexion / Inscription</title>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <h1 class="text-xl font-bold mb-4">Se connecter</h1>
+    <form action="../auth.php" method="POST" class="w-full max-w-sm">
+        <input type="hidden" name="action" value="login">
+        <div class="mb-4">
+            <label class="block mb-1" for="email">Email :</label>
+            <input id="email" name="email" type="email" class="w-full p-2 border">
+        </div>
+        <div class="mb-4">
+            <label class="block mb-1" for="password">Mot de passe :</label>
+            <input id="password" name="password" type="password" class="w-full p-2 border">
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white p-2">Connexion</button>
+    </form>
+    <a href="">Pas encore de compte ?</a>
+</body>
+</html>
