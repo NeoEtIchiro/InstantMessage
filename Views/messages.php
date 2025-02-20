@@ -22,13 +22,15 @@
         <!-- Zone de messages pour la conversation sélectionnée -->
         <section class="flex-grow p-4">
             <div class="flex flex-col h-full">
-                <div id="messages-container" class="w-full flex-grow overflow-auto text-center">
-                    <h2 class="text-2xl font-bold mb-4">Bienvenue sur la messagerie</h2>
-                    <p>Sélectionnez une conversation sur la gauche ou recherchez un utilisateur.</p>  
+                <div id="messages-container" class="w-full flex-grow overflow-auto flex flex-col justify-center items-start">
+                    <h1 class="text-2xl font-bold mb-4">Bienvenue sur Instant Message</h1>
+                    <p class="max-w-[600px] flex justify-center">Sélectionnez une conversation sur la gauche ou recherchez un utilisateur pour en commencer une nouvelle</p>  
                 </div>
-                <form class="w-full h-fit flex">
+                <form id="message-form" class="w-full h-fit flex" style="display: none;">
                     <textarea id="message-text" placeholder="Envoyer un message" class="w-full resize-none p-2 min-h-11 h-11 border rounded-lg mr-2"></textarea>
-                    <button type="submit">Envoyer</button>
+                    <button type="submit">
+                        <img class="h-6 w-6" src="/InstantMessage/public/assets/images/envoyer-le-message.png" alt="Envoyer">
+                    </button>
                 </form>
             </div>
         </section>
@@ -52,15 +54,13 @@
                     dataType: "html",
                     success: function(data) {
                         var $container = $("#messages-container");
-                        // Vérifie si l'utilisateur est proche du bas
                         var isScrolledToBottom = ($container[0].scrollHeight - $container.scrollTop()) <= ($container.outerHeight() + scrollThreshold);
-                        
                         $container.html(data);
-                        
-                        // Si déjà en bas (ou presque), on force le scroll en bas
                         if(isScrolledToBottom) {
                             $container.scrollTop($container[0].scrollHeight);
                         }
+                        // Affiche le formulaire dès qu'une conversation est sélectionnée
+                        $("#message-form").show();
                     },
                     error: function() {
                         $("#messages-container").html("<p>Erreur lors du chargement des messages.</p>");

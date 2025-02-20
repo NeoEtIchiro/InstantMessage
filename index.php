@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (isset($_SESSION['user'])) {
-    header('Location: Views/messages.html');
+    header('Location: views/messages.php');
     exit;
 } else {
-    header('Location: Views/login_register.html');
+    header('Location: views/login_register.html');
     exit;
 }
 ?>

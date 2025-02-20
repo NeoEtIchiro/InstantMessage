@@ -1,4 +1,4 @@
 <?php
 session_destroy();
-header("Location: ../../Views/login_register.html");
+header("Location: ../../views/login_register.html");
 exit;
