@@ -22,7 +22,7 @@
         <!-- Zone de messages pour la conversation sélectionnée -->
         <section class="flex-grow p-4">
             <div class="flex flex-col h-full">
-                <div id="messages-container" class="w-full flex-grow overflow-auto flex flex-col justify-center items-start">
+                <div id="messages-container" class="w-full flex-grow overflow-auto">
                     <h1 class="text-2xl font-bold mb-4">Bienvenue sur Instant Message</h1>
                     <p class="max-w-[600px] flex justify-center">Sélectionnez une conversation sur la gauche ou recherchez un utilisateur pour en commencer une nouvelle</p>  
                 </div>
@@ -75,6 +75,8 @@
                 }
             }, refreshInterval);
 
+            setInterval(loadConversations, 5000);
+
             // Charge la liste des conversations.
             function loadConversations() {
                 $.ajax({
@@ -86,10 +88,16 @@
                         if(response.conversations && response.conversations.length > 0) {
                             response.conversations.forEach(function(conv) {
                                 var li = $('<li>', {
-                                    text: conv.other_login,
                                     'data-id': conv.conversation_id,
-                                    class: "p-4 border-b cursor-pointer hover:bg-gray-100"
+                                    class: "p-4 border-b cursor-pointer hover:bg-gray-100 flex items-center gap-2"
                                 });
+                                var circle = $('<div>', {
+                                    class: "min-w-8 h-8 w-8 rounded-full bg-gray-400"
+                                });
+                                var name = $('<span>', {
+                                    text: conv.other_login
+                                });
+                                li.append(circle, name);
                                 $("#conversation-list").append(li);
                             });
                         } else {

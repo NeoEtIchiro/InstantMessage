@@ -28,10 +28,14 @@
                         if (response.users && response.users.length > 0) {
                             response.users.forEach(function(user) {
                                 var li = $('<li>', {
-                                    text: user.login,
                                     'data-id': user.id,
-                                    class: "cursor-pointer hover:underline"
+                                    // Added py-2 for vertical padding, border-b for 1px bottom border and border-gray-200 for light border color.
+                                    class: "flex items-center cursor-pointer hover:underline border-b border-gray-200 py-2"
                                 });
+                                var circle = $('<div>', {
+                                    class: "h-8 w-8 rounded-full bg-gray-400 mr-2"
+                                });
+                                li.append(circle, user.login);
                                 $('#user-list').append(li);
                             });
                         } else {

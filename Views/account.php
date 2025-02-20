@@ -10,9 +10,9 @@
 <body class="min-h-screen flex flex-col">
     <main class="flex-grow p-4">
         <!-- Affichage de l'email de l'utilisateur -->
-        <div id="account-email"></div>
+        <div id="account-info"></div>
         <form action="../public/api/logout.php" method="POST">
-            <button type="submit">Se déconnecter</button>
+            <button class="bg-red-600 rounded-lg text-white px-4 py-2 mt-4" type="submit">Se déconnecter</button>
         </form>
     </main>
 
@@ -27,13 +27,18 @@
             dataType: "json",
             success: function(response) {
                 if (response.user && response.user.login) {
-                    $("#account-email").text("Email : " + response.user.login);
+                    $("#account-info").html(
+                        '<div class="flex items-center">' +
+                            '<div class="h-12 w-12 rounded-full bg-gray-400 mr-2"></div>' +
+                            '<span>' +  response.user.login + '</span>' +
+                        '</div>'
+                    );
                 } else {
-                    $("#account-email").text("Aucun email trouvé.");
+                    $("#account-info").text("Aucun email trouvé.");
                 }
             },
             error: function() {
-                $("#account-email").text("Erreur lors de la récupération des informations.");
+                $("#account-info").text("Erreur lors de la récupération des informations.");
             }
         });
     });
