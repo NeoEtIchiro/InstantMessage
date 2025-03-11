@@ -92,12 +92,14 @@
                                     class: "p-4 border-b cursor-pointer hover:bg-gray-100 flex items-center gap-2"
                                 });
                                 var circle = $('<div>', {
-                                    class: "min-w-8 h-8 w-8 rounded-full bg-gray-400"
+                                    class: "min-w-12 h-12 w-12 rounded-full bg-gray-400"
                                 });
-                                var name = $('<span>', {
-                                    text: conv.other_login
-                                });
-                                li.append(circle, name);
+                                var text = 
+                                '<div class="flex flex-col">' +
+                                    '<span class="text-lg font-bold">' + conv.other_username + '</span>' +
+                                    '<span>' + conv.other_login + '</span>' +
+                                '</div>';
+                                li.append(circle, text);
                                 $("#conversation-list").append(li);
                             });
                         } else {

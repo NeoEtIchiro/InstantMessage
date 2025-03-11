@@ -9,7 +9,8 @@
 </head>
 <body class="min-h-screen flex flex-col">
     <main class="flex-grow p-4">
-        <input type="text" id="search-bar" placeholder="Rechercher par email" class="w-full p-2 border mb-4">
+        <!-- Updated placeholder for searching by username or login -->
+        <input type="text" id="search-bar" placeholder="Rechercher par username ou login" class="w-full p-2 border mb-4">
         <ul id="user-list" class="list-disc pl-5"></ul>
     </main>
 
@@ -29,13 +30,19 @@
                             response.users.forEach(function(user) {
                                 var li = $('<li>', {
                                     'data-id': user.id,
-                                    // Added py-2 for vertical padding, border-b for 1px bottom border and border-gray-200 for light border color.
+// Added py-2 for vertical padding, border-b for 1px bottom border and border-gray-200 for light border color.
+// Added py-2 for vertical padding, border-b for 1px bottom border and border-gray-200 for light border color.
                                     class: "flex items-center cursor-pointer hover:underline border-b border-gray-200 py-2"
                                 });
                                 var circle = $('<div>', {
-                                    class: "h-8 w-8 rounded-full bg-gray-400 mr-2"
+                                    class: "h-12 w-12 rounded-full bg-gray-400 mr-2"
                                 });
-                                li.append(circle, user.login);
+                                var text = 
+                                '<div class="flex flex-col">' +
+                                    '<span class="text-lg font-bold">' + user.username + '</span>' +
+                                    '<span>' + user.login + '</span>' +
+                                '</div>';
+                                li.append(circle, text);
                                 $('#user-list').append(li);
                             });
                         } else {
@@ -45,10 +52,11 @@
                     error: function() {
                         $('#user-list').append('<li>Erreur lors de la récupération des utilisateurs.</li>');
                     }
+// Au clic sur un utilisateur, rediriger vers messages.html avec l'ID utilisateur en paramètre
                 });
             }
 
-            // Au clic sur un utilisateur, rediriger vers messages.html avec l'ID utilisateur en paramètre
+// Au clic sur un utilisateur, rediriger vers messages.html avec l'ID utilisateur en paramètre
             $('#user-list').on('click', 'li[data-id]', function() {
                 var userId = $(this).data('id');
                 console.log("Clique sur un utilisateur, id =", userId);
@@ -57,10 +65,11 @@
 
             $('#search-bar').on('input', function() {
                 const query = $(this).val();
+// Chargement initial de tous les utilisateurs
                 fetchUsers(query);
             });
 
-            // Chargement initial de tous les utilisateurs
+// Chargement initial de tous les utilisateurs
             fetchUsers();
         });
     </script>

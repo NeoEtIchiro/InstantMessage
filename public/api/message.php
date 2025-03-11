@@ -43,17 +43,21 @@ if (isset($_GET['action']) && $_GET['action'] === 'getMessages') {
     foreach ($messages as $msg) {
         if ($msg->sender_id == $currentUserId) {
             // Message envoyé par moi -> alignement à droite
-            echo "<div class='text-right mb-2'>";
-            echo "<span class='bg-blue-500 text-white text-left p-2 rounded inline-block max-w-[700px]'>" . htmlspecialchars($msg->content) . "</span>";
+            echo "<div class='w-full flex justify-end mb-2 gap-2 items-center'>";
+                echo "<div class='flex flex-col justify-end'>";
+                    echo "<span class='bg-blue-500 text-white p-2 w-fit rounded inline-block max-w-[700px]'>" . htmlspecialchars($msg->content) . "</span>";
+                    echo "<span class='text-sm text-gray-400'>" . htmlspecialchars($msg->time_stamp) . "</span>";
+                echo "</div>";
             echo "</div>";
         } else {
             // Message des autres -> alignement à gauche
             echo "<div class='text-left mb-2 flex gap-2 items-center'>";
-            echo "<div class='w-8 h-8 bg-gray-300 rounded-full'></div>";
-            echo "<div class='flex flex-col'>";
-            echo "<span class='text-sm'>" . htmlspecialchars($msg->login) . "</span>";
-            echo "<span class='bg-gray-200 p-2 rounded inline-block max-w-[700px]'>" . htmlspecialchars($msg->content) . "</span>";
-            echo "</div>";
+                echo "<div class='w-8 h-8 bg-gray-300 rounded-full'></div>";
+                echo "<div class='flex flex-col'>";
+                    echo "<span class='text-sm'>" . htmlspecialchars($msg->username) . "</span>";
+                    echo "<span class='bg-gray-200 p-2 w-fit rounded inline-block max-w-[700px]'>" . htmlspecialchars($msg->content) . "</span>";
+                    echo "<span class='text-sm text-gray-400'>" . htmlspecialchars($msg->time_stamp) . "</span>";
+                echo "</div>";
             echo "</div>";
         }
     }

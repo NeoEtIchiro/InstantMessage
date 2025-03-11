@@ -45,4 +45,24 @@ class Conversation {
 
         return new Conversation($conversationId, 'direct');
     }
+
+    public static function createGroupConversation(PDO $conn, $userId, $conversationName) {
+        $stmt = $conn->prepare("INSERT INTO conversations (type) VALUES ('group')");
+        $stmt->execute();
+        $conversationId = $conn->lastInsertId();
+
+        // Ajouter le créateur
+        $stmt1 = $conn->prepare("INSERT INTO conversation_users (conversation_id, user_id) VALUES (:conversationId, :userId)");
+        $stmt1->bindParam(':conversationId', $conversationId, PDO::PARAM_INT);
+        $stmt1->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt1->execute();
+
+        // Ajouter le nom de la conversation
+        $stmt2 = $conn->prepare("INSERT INTO conversations (conversation_id, name) VALUES (:conversationId, :name)");
+        $stmt2->bindParam(':conversationId', $conversationId, PDO::PARAM_INT);
+        $stmt2->bindParam(':name', $conversationName, PDO::PARAM_STR);
+        $stmt2->execute();
+
+        return new Conversation($conversationId, 'group');
+    }
 }

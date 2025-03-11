@@ -5,21 +5,23 @@ class Message {
     public $sender_id;
     public $content;
     public $time_stamp;
-    public $login; // Ajout de la propriété login
+    public $login;
+    public $username; // Ajout de la propriété username
 
-    // Ajout du paramètre $login (optionnel) dans le constructeur
-    public function __construct($id = null, $conversation_id = null, $sender_id = null, $content = '', $time_stamp = null, $login = null) {
+    // Ajout du paramètre $username dans le constructeur
+    public function __construct($id = null, $conversation_id = null, $sender_id = null, $content = '', $time_stamp = null, $login = null, $username = null) {
         $this->id = $id;
         $this->conversation_id = $conversation_id;
         $this->sender_id = $sender_id;
         $this->content = $content;
         $this->time_stamp = $time_stamp;
         $this->login = $login;
+        $this->username = $username;
     }
 
     // Récupérer tous les messages d'une conversation en effectuant une jointure avec la table users
     public static function getMessagesByConversation(PDO $conn, $conversationId) {
-        $query = "SELECT m.*, u.login AS login 
+        $query = "SELECT m.*, u.login AS login, u.username AS username
                   FROM messages m 
                   JOIN users u ON m.sender_id = u.id 
                   WHERE m.conversation_id = :convId 
@@ -35,7 +37,8 @@ class Message {
                 $row['sender_id'], 
                 $row['content'], 
                 $row['time_stamp'], 
-                $row['login'] // Passage du login récupéré
+                $row['login'],         // login
+                $row['username']       // username récupéré
             );
         }
         return $messages;
