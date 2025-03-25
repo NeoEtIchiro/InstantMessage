@@ -178,6 +178,7 @@
                     success: function(response) {
                         if(response.success){
                             // Efface le champ de texte et recharge la conversation
+                            // Efface le champ de texte et recharge la conversation
                             $("#message-text").val("");
                             loadConversation(currentConversationId);
                         } else {

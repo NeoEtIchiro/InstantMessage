@@ -26,6 +26,21 @@ class ConversationController {
         return $global;
     }
 
+    public static function getGlobalConversations() {
+        // Création d'une connexion à la base de données
+        $connexionDB = new ConnexionDB();
+        $conn = $connexionDB->getConnection();
+        
+        // Préparation de la requête pour trouver toutes les conversations de type 'global'
+        $stmt = $conn->prepare("SELECT * FROM conversations WHERE type = 'global'");
+        $stmt->execute();
+        
+        // Récupération de toutes les conversations globales
+        $globals = $stmt->fetchAll(PDO::FETCH_OBJ);
+        
+        return $globals;
+    }
+
     // Retourne la liste des conversations de l'utilisateur avec le login de l'autre participant pour une conversation directe
     public static function getConversationsForUser($userId) {
         // Création d'une connexion à la base de données
@@ -35,18 +50,18 @@ class ConversationController {
         // Récupération des conversations de l'utilisateur
         $conversations = Conversation::getConversationsForUser($conn, $userId);
         $result = [];
-
-        // Récupération de la conversation globale
-        $global = self::getGlobalConversation();
-        if ($global) {
+    
+        // Récupération de toutes les conversations globales
+        $globals = self::getGlobalConversations();
+        foreach ($globals as $global) {
             $result[] = [
                 'conversation_id' => $global->id,
                 'type'            => 'global',
                 'other_login'     => 'Chat with everyone',
-                'other_username'  => 'Global'
+                'other_username'  => $global->name
             ];
         }
-
+    
         // Parcours des conversations directes ou de groupe
         foreach ($conversations as $conversation) {
             // Préparation de la requête pour récupérer l'autre participant
@@ -61,7 +76,7 @@ class ConversationController {
             // Extraction des informations de l'autre participant
             $other = $stmt->fetch(PDO::FETCH_ASSOC);
             $other_username = $other ? User::getUsernameByLogin($conn, $other['login']) : null;
-
+    
             // Ajout de la conversation au résultat avec les informations appropriées
             $result[] = [
                 'conversation_id' => $conversation->id,
