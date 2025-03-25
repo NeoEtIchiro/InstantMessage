@@ -6,19 +6,19 @@
             <!-- Lien vers la messagerie -->
             <li>
                 <a href="messages.php" class="hover:underline flex items-center gap-2">
-                    <img class="h-8 w-8" src="/InstantMessage/public/assets/images/messager.png" alt="Messages">
+                    <img class="h-8 w-8" src="../../public/assets/images/messager.png" alt="Messages">
                 </a>
             </li>
             <!-- Lien vers la page de recherche -->
             <li>
                 <a href="search.php" class="hover:underline flex items-center gap-2">
-                    <img class="h-8 w-8" src="/InstantMessage/public/assets/images/chercher.png" alt="Rechercher">
+                    <img class="h-8 w-8" src="../../public/assets/images/chercher.png" alt="Rechercher">
                 </a>
             </li>
             <!-- Lien vers la page du compte utilisateur -->
             <li>
                 <a href="account.php" class="hover:underline flex items-center gap-2">
-                    <img class="h-8 w-8" src="/InstantMessage/public/assets/images/utilisateur.png" alt="Compte">
+                    <img class="h-8 w-8" src="../../public/assets/images/utilisateur.png" alt="Compte">
                 </a>
             </li>
         </ul>
