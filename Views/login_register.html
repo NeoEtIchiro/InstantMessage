@@ -7,74 +7,93 @@
     <title>Connexion / Inscription</title>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4">
+    <!-- Titre du formulaire -->
     <h1 id="form-title" class="text-xl font-bold mb-4">Se connecter</h1>
+    
+    <!-- Formulaire d'authentification -->
     <form id="auth-form" class="w-full max-w-sm">
+        <!-- Champ caché pour définir l'action du formulaire -->
         <input id="action-input" type="hidden" name="action" value="login">
+        
+        <!-- Champ email -->
         <div class="mb-4">
             <label class="block mb-1" for="email">Email :</label>
             <input id="email" name="email" type="email" class="w-full p-2 border" required>
         </div>
+        
+        <!-- Champ mot de passe -->
         <div class="mb-4">
             <label class="block mb-1" for="password">Mot de passe :</label>
             <input id="password" name="password" type="password" class="w-full p-2 border" required>
         </div>
+        
+        <!-- Bouton de soumission -->
         <button id="submit-button" type="submit" class="w-full bg-blue-500 text-white p-2">Connexion</button>
+        
+        <!-- Zone d'affichage des messages d'erreur -->
         <div id="error-message" class="mt-4 text-red-500"></div>
     </form>
+    
+    <!-- Lien pour basculer entre connexion et inscription -->
     <a href="#" id="toggle-link" class="mt-4">Pas encore de compte ?</a>
     
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const toggleLink = document.getElementById('toggle-link');
-        const formTitle = document.getElementById('form-title');
-        const actionInput = document.getElementById('action-input');
-        const submitButton = document.getElementById('submit-button');
-        const errorMessage = document.getElementById('error-message');
-        const authForm = document.getElementById('auth-form');
-    
-        toggleLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            if (actionInput.value === 'login') {
-                actionInput.value = 'register';
-                formTitle.textContent = 'Créer un compte';
-                submitButton.textContent = 'Inscription';
-                toggleLink.textContent = 'Vous avez déjà un compte ?';
-            } else {
-                actionInput.value = 'login';
-                formTitle.textContent = 'Se connecter';
-                submitButton.textContent = 'Connexion';
-                toggleLink.textContent = 'Pas encore de compte ?';
-            }
+        // Au chargement complet du document
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleLink = document.getElementById('toggle-link');
+            const formTitle = document.getElementById('form-title');
+            const actionInput = document.getElementById('action-input');
+            const submitButton = document.getElementById('submit-button');
+            const errorMessage = document.getElementById('error-message');
+            const authForm = document.getElementById('auth-form');
+
+            // Changement du formulaire entre connexion et inscription
+            toggleLink.addEventListener("click", (e) => {
+                e.preventDefault(); // Empêche le comportement par défaut du lien
+                if (actionInput.value === 'login') {
+                    actionInput.value = 'register';
+                    formTitle.textContent = 'Créer un compte';
+                    submitButton.textContent = 'Inscription';
+                    toggleLink.textContent = 'Vous avez déjà un compte ?';
+                } else {
+                    actionInput.value = 'login';
+                    formTitle.textContent = 'Se connecter';
+                    submitButton.textContent = 'Connexion';
+                    toggleLink.textContent = 'Pas encore de compte ?';
+                }
+            });
+
+            // Gestion de la soumission du formulaire
+            authForm.addEventListener("submit", (e) => {
+                e.preventDefault(); // Empêche le comportement par défaut de soumission
+
+                // Effacer les anciens messages d'erreur
+                errorMessage.textContent = "";
+
+                // Récupérer les données du formulaire
+                const formData = new FormData(authForm);
+
+                fetch("../public/api/auth.php", {
+                    method: "POST",
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Redirection en cas de succès
+                        if (data.success) {
+                            window.location.href = "messages.php";
+                        } else {
+                            // Affichage du message d'erreur en cas d'échec
+                            errorMessage.textContent = data.message || "Erreur lors de l'authentification.";
+                        }
+                    })
+                    .catch(error => {
+                        // Affichage d'une erreur en cas de problème de communication avec le serveur
+                        errorMessage.textContent = "Erreur lors de la communication avec le serveur.";
+                        console.error("Erreur:", error);
+                    });
+            });
         });
-    
-        authForm.addEventListener("submit", (e) => {
-          e.preventDefault();
-          
-          // Effacer les anciens messages d'erreur
-          errorMessage.textContent = "";
-    
-          // Récupérer les données du formulaire
-          const formData = new FormData(authForm);
-    
-          fetch("../public/api/auth.php", {
-            method: "POST",
-            body: formData
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  // Rediriger vers messages.html en cas de succès
-                  window.location.href = "messages.php";
-              } else {
-                  errorMessage.textContent = data.message || "Erreur lors de l'authentification.";
-              }
-          })
-          .catch(error => {
-              errorMessage.textContent = "Erreur lors de la communication avec le serveur.";
-              console.error("Erreur:", error);
-          });
-        });
-      });
     </script>
 </body>
 </html>

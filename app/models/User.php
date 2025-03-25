@@ -1,17 +1,20 @@
 <?php
+// Classe représentant un utilisateur
 class User {
-    public $id;
-    public $login;
-    public $username; // Ajoutez cette ligne
-    public $password; // Mot de passe hashé
+    public $id;           // Identifiant de l'utilisateur
+    public $login;        // Adresse email de connexion
+    public $username;     // Nom d'utilisateur
+    public $password;     // Mot de passe haché
 
+    // Constructeur de la classe User
     public function __construct($id = null, $login = '', $password = '') {
         $this->id = $id;
         $this->login = $login;
         $this->password = $password;
-        $this->username = 'user';
+        $this->username = 'user'; // Valeur par défaut pour username
     }
 
+    // Récupère un utilisateur par son ID depuis la base de données
     public static function getUserById(PDO $conn, $id) {
         $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -22,6 +25,7 @@ class User {
         return null;
     }
 
+    // Récupère un utilisateur par son email depuis la base de données
     public static function getUserByEmail(PDO $conn, $email) {
         $stmt = $conn->prepare("SELECT * FROM users WHERE login = :email");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -32,6 +36,7 @@ class User {
         return null;
     }
 
+    // Recherche des utilisateurs par une requête et éventuellement exclut un utilisateur via son ID
     public static function searchUsers(PDO $conn, $query, $excludeId = null) {
         $searchQuery = "%" . $query . "%";
         if ($excludeId) {
@@ -47,6 +52,7 @@ class User {
         return $stmt->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'User');
     }
 
+    // Récupère le nom d'utilisateur (username) à partir du login dans la base de données
     public static function getUsernameByLogin(PDO $conn, $login) {
         $stmt = $conn->prepare("SELECT username FROM users WHERE login = :login");
         $stmt->bindParam(':login', $login);
