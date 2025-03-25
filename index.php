@@ -13,17 +13,3 @@ if (isset($_SESSION['user'])) {
     exit;
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Intégration de Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Titre de la</title>
-</head>
-<body class="min-h-screen flex flex-col">
-    
-</body>
-</html>

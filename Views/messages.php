@@ -104,7 +104,10 @@
                                 });
                                 // Création de l'avatar
                                 var circle = $('<div>', {
-                                    class: "min-w-12 h-12 w-12 rounded-full bg-gray-400"
+                                    class: "min-w-12 h-12 w-12 rounded-full",
+                                    css: {
+                                        backgroundColor: conv.type == 'global' ? "#4CAF50" : "#B0BEC5" // Vert pour les conv globales, gris sinon
+                                    }
                                 });
                                 // Informations sur l'autre utilisateur
                                 var text = 
