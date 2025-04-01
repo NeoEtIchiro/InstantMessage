@@ -34,7 +34,7 @@
                 <form id="message-form" class="w-full h-fit flex" style="display: none;">
                     <textarea id="message-text" placeholder="Envoyer un message" class="w-full resize-none p-2 min-h-11 h-11 border rounded-lg mr-2"></textarea>
                     <button type="submit">
-                        <img class="h-6 w-6" src="/InstantMessage/public/assets/images/envoyer-le-message.png" alt="Envoyer">
+                        <img class="h-6 w-6" src="../public/assets/images/envoyer-le-message.png" alt="Envoyer">
                     </button>
                 </form>
             </div>

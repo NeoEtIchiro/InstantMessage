@@ -1,4 +1,8 @@
 # InstantMessage
+URL : http://instant-message.42web.io
+
+### Important
+Ne pas utiliser le wifi de l'IUT
 
 ## Description
 InstantMessage est une application de messagerie instantanée permettant aux utilisateurs de communiquer via des conversations globales ou des conversations directes. L'application inclut des fonctionnalités telles que l'inscription, la connexion, la gestion de compte, et la déconnexion.
